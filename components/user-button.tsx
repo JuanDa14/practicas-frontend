@@ -35,8 +35,8 @@ export const UserButton = () => {
 			<DropdownMenuTrigger asChild>
 				<Button variant='ghost' className='relative h-8 w-8 rounded-full'>
 					<Avatar className='h-12 w-12'>
-						<AvatarImage src={session?.user.username} alt={session?.user?.username} />
-						<AvatarFallback>{session?.user?.username}</AvatarFallback>
+						<AvatarImage src={session?.user.avatar} alt={session?.user.username} />
+						<AvatarFallback>{session?.user.username}</AvatarFallback>
 					</Avatar>
 				</Button>
 			</DropdownMenuTrigger>
@@ -53,24 +53,24 @@ export const UserButton = () => {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem onClick={() => onNavigate('/settings')}>
+					<DropdownMenuItem className='cursor-pointer' onClick={() => onNavigate('/settings')}>
 						Perfil
 						<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						Facturación
+					<DropdownMenuItem className='cursor-pointer'>
+						Proyectos
 						<DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
 					</DropdownMenuItem>
 
 					<ModeToggle />
 
-					<DropdownMenuItem>
+					<DropdownMenuItem className='cursor-pointer'>
 						Configuración
 						<DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem onClick={handleSignOut}>
+				<DropdownMenuItem className='cursor-pointer' onClick={handleSignOut}>
 					Cerrar sesión
 					<DropdownMenuShortcut>⇧⌘L</DropdownMenuShortcut>
 				</DropdownMenuItem>

@@ -88,6 +88,11 @@ export const options: NextAuthOptions = {
 				lastName: token.user.lastName,
 				isActive: token.user.isActive,
 				role: token.user.role,
+				avatar: token.user.avatar,
+				address: token.user.address,
+				email: token.user.email,
+				gender: token.user.gender,
+				phone_number: token.user.phone_number,
 			};
 
 			return session;

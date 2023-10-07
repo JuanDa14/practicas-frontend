@@ -32,7 +32,8 @@ const SettingsFormSchema = z.object({
 	lastName: z.string().min(1, {
 		message: 'El apellido debe tener al menos 1 caracteres.',
 	}),
-	// imageURL: z.string().min(1, { message: 'La imagen es requerida.' }),
+	avatar: z.string().min(1, { message: 'La imagen es requerida.' }),
+	email: z.string().email({ message: 'El correo electrónico no es válido.' }),
 });
 
 type SettingFormValues = z.infer<typeof SettingsFormSchema>;
@@ -44,7 +45,7 @@ interface SettingFromProps {
 export function FormSetting({ user }: SettingFromProps) {
 	const router = useRouter();
 
-	const { update } = useSession();
+	const { update, data: session } = useSession();
 
 	const form = useForm<SettingFormValues>({
 		resolver: zodResolver(SettingsFormSchema),
@@ -52,6 +53,8 @@ export function FormSetting({ user }: SettingFromProps) {
 			firstName: user.firstName,
 			lastName: user.lastName,
 			username: user.username,
+			avatar: user.avatar,
+			email: user.email,
 		},
 	});
 
@@ -59,7 +62,7 @@ export function FormSetting({ user }: SettingFromProps) {
 
 	async function onSubmit(values: SettingFormValues) {
 		try {
-			const { data } = await axiosBaseUrl.patch<User>('/user/profile', values);
+			const { data } = await axiosBaseUrl.patch<User>(`/users/${session?.user._id}`, values);
 
 			await update({ user: { ...data } });
 
@@ -76,7 +79,7 @@ export function FormSetting({ user }: SettingFromProps) {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3'>
 				<FormField
-					name='imageURL'
+					name='avatar'
 					render={({ field }) => (
 						<FormItem className='mb-10'>
 							<FormControl>
@@ -125,6 +128,24 @@ export function FormSetting({ user }: SettingFromProps) {
 								<FormLabel>Nombre de usuario</FormLabel>
 								<FormControl>
 									<Input disabled={isSubmitting} placeholder='usuario...' {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name='email'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Correo</FormLabel>
+								<FormControl>
+									<Input
+										type='email'
+										disabled={isSubmitting}
+										placeholder='correo...'
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
