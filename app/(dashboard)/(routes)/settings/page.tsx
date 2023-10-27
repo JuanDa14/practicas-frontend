@@ -1,12 +1,18 @@
+import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import { options } from '@/lib/auth-options';
+import { authOptions } from '@/lib/auth-options';
 
 import { Separator } from '@/components/ui/separator';
 import { FormSetting } from './_components/setting-form';
 
+export const metadata: Metadata = {
+	title: 'Perfil',
+	description: 'Actualiza tu información personal.',
+};
+
 const SettingsPage = async () => {
-	const session = await getServerSession(options);
+	const session = await getServerSession(authOptions);
 
 	if (!session?.user) {
 		return redirect('/login');

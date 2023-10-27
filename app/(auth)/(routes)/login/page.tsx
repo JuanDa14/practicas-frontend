@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
-import { options } from '@/lib/auth-options';
+import { authOptions } from '@/lib/auth-options';
 import {
 	Card,
 	CardContent,
@@ -14,9 +14,11 @@ import {
 import { FormLogin } from './_components/form-login';
 
 const Page = async () => {
-	const session = await getServerSession(options);
+	const session = await getServerSession(authOptions);
 
-	session?.user && redirect('/');
+	if (session?.user) {
+		redirect('/dashboard');
+	}
 
 	return (
 		<div className='w-full min-h-screen flex items-center justify-center px-5 md:px-0'>

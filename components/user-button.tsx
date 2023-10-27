@@ -53,18 +53,14 @@ export const UserButton = () => {
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem className='cursor-pointer' onClick={() => onNavigate('/settings')}>
-						Perfil
-						<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-					</DropdownMenuItem>
-					<DropdownMenuItem className='cursor-pointer'>
+					<DropdownMenuItem className='cursor-pointer' onClick={() => onNavigate('/projects')}>
 						Proyectos
 						<DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
 					</DropdownMenuItem>
 
 					<ModeToggle />
 
-					<DropdownMenuItem className='cursor-pointer'>
+					<DropdownMenuItem className='cursor-pointer' onClick={() => onNavigate('/settings')}>
 						Configuración
 						<DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
 					</DropdownMenuItem>

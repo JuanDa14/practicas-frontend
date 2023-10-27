@@ -1,21 +1,23 @@
 import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import { User } from '@/interfaces/user';
+import { BackendTokens, User } from '@/interfaces/user';
 
 declare module 'next-auth' {
 	interface Session {
 		user: User;
+		backendTokens: BackendTokens;
 	}
 }
 
 declare module 'next-auth/jwt' {
 	interface JWT {
 		user: User;
+		backendTokens: BackendTokens;
 	}
 }
 
-export const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
 	session: { strategy: 'jwt' },
 	providers: [
 		CredentialsProvider({
@@ -93,6 +95,12 @@ export const options: NextAuthOptions = {
 				email: token.user.email,
 				gender: token.user.gender,
 				phone_number: token.user.phone_number,
+			};
+
+			session.backendTokens = {
+				accessToken: token.backendTokens.accessToken,
+				refreshToken: token.backendTokens.refreshToken,
+				expiresIn: token.backendTokens.expiresIn,
 			};
 
 			return session;
