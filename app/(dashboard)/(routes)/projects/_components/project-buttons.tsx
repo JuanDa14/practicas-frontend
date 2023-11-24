@@ -1,25 +1,29 @@
 'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useModal } from '@/hooks/use-modal-store';
 import { Button } from '@/components/ui/button';
-import { Project } from '@/interfaces/project';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { axios } from '@/lib/axios';
 import { useConfettiStore } from '@/hooks/use-confetti-store';
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
 
 interface ProjectButtonsProps {
-	project: Project;
+	project: ProjectWithCreator;
 }
 
 export const ProjectButtons = ({ project }: ProjectButtonsProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { data: session } = useSession();
+
+	const isValidFinishedProject =
+		!(project.client.length > 0) ||
+		!(project.tasks.length > 0) ||
+		!(project.collaborators.length > 0);
 
 	const { onOpen } = useModal();
 	const { onOpen: onOpenConfetti } = useConfettiStore();
@@ -76,8 +80,8 @@ export const ProjectButtons = ({ project }: ProjectButtonsProps) => {
 			)}
 			{!project.isFinished && (
 				<Button
-					variant={'secondary'}
-					disabled={isLoading}
+					variant={'outline'}
+					disabled={isLoading || isValidFinishedProject}
 					onClick={onFinishProject}
 					type='button'
 				>

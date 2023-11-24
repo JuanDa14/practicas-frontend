@@ -94,8 +94,6 @@ export const FormUser = ({ initialData, roles }: FormUserProps) => {
 	const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
 		if (initialData) {
 			try {
-				console.log(values);
-
 				await axios.patch(`/users/${initialData._id}`, {
 					...values,
 					isActive: values.isActive === 'Activo' ? true : false,

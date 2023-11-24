@@ -6,7 +6,7 @@ import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { Pencil, PlusCircle, SaveIcon, User, X } from 'lucide-react';
 import { axios } from '@/lib/axios';
-import { Project } from '@/interfaces/project';
+import { Project, ProjectWithCreator } from '@/interfaces/project';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { IconBadge } from '@/components/icon-badge';
 
 interface FormClientProps {
-	project: Project;
+	project: ProjectWithCreator;
 }
 
 const formSchema = z.object({

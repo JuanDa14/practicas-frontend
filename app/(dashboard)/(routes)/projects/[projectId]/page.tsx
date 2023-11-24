@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-options';
 import { Separator } from '@/components/ui/separator';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 
 import { FormProject } from '../_components/form-project';
 import { FormClient } from '../_components/form-client';
@@ -10,7 +10,7 @@ import { FormCollaborators } from '../_components/form-collaborators';
 import { FormTask } from '../_components/form-task';
 import { ProjectButtons } from '../_components/project-buttons';
 
-async function getProject(id: string, access_token: string): Promise<Project> {
+async function getProject(id: string, access_token: string): Promise<ProjectWithCreator> {
 	const res = await fetch(`${process.env.API_URL}/projects/${id}`, {
 		headers: {
 			Authorization: `Bearer ${access_token}`,

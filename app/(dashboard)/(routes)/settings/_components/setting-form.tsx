@@ -84,7 +84,7 @@ export function FormSetting({ user }: SettingFromProps) {
 			await update({ user: { ...data } });
 
 			router.refresh();
-			router.push('/');
+			router.push('/dashboard');
 
 			toast.success('Perfil actualizado correctamente.');
 		} catch {

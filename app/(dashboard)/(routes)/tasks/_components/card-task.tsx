@@ -15,7 +15,7 @@ interface CardTaskProps {
 export const CardTask = ({ task }: CardTaskProps) => {
 	const { data: session } = useSession();
 
-	const isOwner = task.project.creator._id === session?.user?._id || false;
+	const isOwner = task.project.creator === session?.user?._id || false;
 
 	const router = useRouter();
 

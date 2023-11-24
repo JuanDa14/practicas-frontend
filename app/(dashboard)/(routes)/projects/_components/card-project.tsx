@@ -1,12 +1,12 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 
 interface CreateProjectPageProps {
-	project: Project;
+	project: ProjectWithCreator;
 }
 
 export const CardProject = ({ project }: CreateProjectPageProps) => {

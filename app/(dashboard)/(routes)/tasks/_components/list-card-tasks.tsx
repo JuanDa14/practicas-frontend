@@ -24,7 +24,9 @@ export const ListCardTasks = ({ tasks }: ListCardTasksProps) => {
 			return acc;
 		}, [] as Project[]);
 
-		setProjects(uniqueProjects);
+		const unfinishedProject = uniqueProjects.filter((project) => !project.isFinished);
+
+		setProjects(unfinishedProject);
 	}, [tasks]);
 
 	const handleFilterTasks = (projectId: string) => {
@@ -49,7 +51,7 @@ export const ListCardTasks = ({ tasks }: ListCardTasksProps) => {
 						className={cn(
 							'border rounded p-2 cursor-pointer',
 							isSelectedProject === project._id &&
-								'border-sky-600 bg-sky-100/50 text-sky-600'
+								'border-sky-600 bg-sky-100/50 text-sky-600 dark:text-white dark:border-white dark:bg-primary-foreground/90'
 						)}
 						key={project._id}
 					>

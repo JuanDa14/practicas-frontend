@@ -4,11 +4,11 @@ import { IconBadge } from '@/components/icon-badge';
 import { Button } from '@/components/ui/button';
 import { Users2 } from 'lucide-react';
 import { Collaborators } from './collaborators';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { useModal } from '@/hooks/use-modal-store';
 
 interface FormCollaboratorsProps {
-	project: Project;
+	project: ProjectWithCreator;
 }
 
 export const FormCollaborators = ({ project }: FormCollaboratorsProps) => {

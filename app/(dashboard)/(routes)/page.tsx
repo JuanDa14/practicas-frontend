@@ -1,12 +1,15 @@
-import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth-options';
 
-export const metadata: Metadata = {
-	title: 'DashBoard',
-	description: 'DashBoard de la constructora WVS',
+const MainPage = async () => {
+	const session = await getServerSession(authOptions);
+
+	if (!session?.user) {
+		redirect('/login');
+	} else {
+		redirect('/dashboard');
+	}
 };
 
-const DashBoardPage = () => {
-	return <div className='h-full'>DashBoardPage</div>;
-};
-
-export default DashBoardPage;
+export default MainPage;

@@ -1,8 +1,8 @@
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { CardProject } from './card-project';
 
 interface ListCardProjectsProps {
-	projects: Project[];
+	projects: ProjectWithCreator[];
 }
 
 export const ListCardProjects = ({ projects }: ListCardProjectsProps) => {

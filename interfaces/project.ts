@@ -7,6 +7,20 @@ export interface Project {
 	description: string;
 	client: string;
 	deadline: Date;
+	creator: string;
+	tasks: Task[];
+	collaborators: User[];
+	createdAt: Date;
+	updatedAt: Date;
+	isFinished: boolean;
+}
+
+export interface ProjectWithCreator {
+	_id: string;
+	name: string;
+	description: string;
+	client: string;
+	deadline: Date;
 	creator: User;
 	tasks: Task[];
 	collaborators: User[];

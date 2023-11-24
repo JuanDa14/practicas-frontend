@@ -20,7 +20,7 @@ import { Icons } from '@/components/icons';
 import { addDays } from 'date-fns';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/date-picker';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { axios } from '@/lib/axios';
 import { IconBadge } from '@/components/icon-badge';
 import { File } from 'lucide-react';
@@ -43,7 +43,7 @@ const formSchema = z.object({
 });
 
 interface FormProjectProps {
-	project?: Project;
+	project?: ProjectWithCreator;
 }
 
 export const FormProject = ({ project }: FormProjectProps) => {
@@ -71,7 +71,7 @@ export const FormProject = ({ project }: FormProjectProps) => {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		if (project) {
 			try {
-				await axios.patch<Project>(
+				await axios.patch<ProjectWithCreator>(
 					`/projects/${project._id}`,
 					{ ...values, creator: session?.user._id },
 					{ headers: { Authorization: `Bearer ${session?.backendTokens.accessToken}` } }
@@ -83,11 +83,12 @@ export const FormProject = ({ project }: FormProjectProps) => {
 			}
 		} else {
 			try {
-				const { data } = await axios.post<Project>('/projects', {
+				const { data } = await axios.post<ProjectWithCreator>('/projects', {
 					...values,
 					creator: session?.user._id,
 				});
 				toast.success('Proyecto creado correctamente.');
+				router.refresh();
 				router.push(`/projects/${data._id}`);
 			} catch (error) {
 				toast.error('Ocurrio un error al crear el proyecto.');

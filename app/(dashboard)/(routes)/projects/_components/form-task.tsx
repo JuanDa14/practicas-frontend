@@ -4,11 +4,11 @@ import { IconBadge } from '@/components/icon-badge';
 import { Button } from '@/components/ui/button';
 import { FileArchive } from 'lucide-react';
 import { Tasks } from './tasks';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { useModal } from '@/hooks/use-modal-store';
 
 interface FormTaskProps {
-	project: Project;
+	project: ProjectWithCreator;
 }
 
 export const FormTask = ({ project }: FormTaskProps) => {

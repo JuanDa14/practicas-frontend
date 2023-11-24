@@ -43,7 +43,7 @@ export const FormLogin = () => {
 			username: values.username,
 			password: values.password,
 			redirect: true,
-			callbackUrl: '/',
+			callbackUrl: '/dashboard',
 		});
 	};
 

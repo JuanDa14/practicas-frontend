@@ -7,10 +7,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
 import { format, subDays } from 'date-fns';
+import { ProtectedComponent } from '@/components/protected-component';
 
-export const columns: ColumnDef<Project>[] = [
+export const columns: ColumnDef<ProjectWithCreator>[] = [
 	{
 		accessorKey: 'name',
 		header: ({ column }) => {
@@ -141,11 +142,13 @@ export const columns: ColumnDef<Project>[] = [
 		accessorKey: 'actions',
 		header: 'Acciones',
 		cell: ({ row }) => (
-			<Link href={`/projects/${row.original._id}`}>
-				<Button size={'icon'} type='button'>
-					<Pencil className='w-4 h-4' />
-				</Button>
-			</Link>
+			<ProtectedComponent roles={['ADMINISTRADOR', 'SUPER USUARIO']}>
+				<Link href={`/projects/${row.original._id}`}>
+					<Button size={'icon'} type='button'>
+						<Pencil className='w-4 h-4' />
+					</Button>
+				</Link>
+			</ProtectedComponent>
 		),
 	},
 ];

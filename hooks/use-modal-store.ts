@@ -1,4 +1,4 @@
-import { Project } from '@/interfaces/project';
+import { Project, ProjectWithCreator } from '@/interfaces/project';
 import { Role } from '@/interfaces/role';
 import { Task } from '@/interfaces/task';
 import { User } from '@/interfaces/user';
@@ -12,7 +12,7 @@ export type ModalType =
 	| 'deleteRole';
 
 interface ModalData {
-	project?: Project;
+	project?: Project | ProjectWithCreator;
 	task?: Task;
 	user?: User;
 	role?: Role;

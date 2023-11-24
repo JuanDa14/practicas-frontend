@@ -1,17 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { Grip, Pencil } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { TYPE_PRIORITY, Task, TaskWithProject } from '@/interfaces/task';
-import toast from 'react-hot-toast';
-import { axios } from '@/lib/axios';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import { Grip } from 'lucide-react';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { axios } from '@/lib/axios';
+import { TYPE_PRIORITY, TaskWithProject } from '@/interfaces/task';
 
 interface ChaptersListProps {
 	items: TaskWithProject[];
@@ -23,6 +23,7 @@ export const DragDropTaskList = ({ items }: ChaptersListProps) => {
 	const router = useRouter();
 
 	const [isMounted, setIsMounted] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [tasks, setTasks] = useState<TaskWithProject[]>([]);
 	const [tasksCompleted, setTasksCompleted] = useState<TaskWithProject[]>([]);
 
@@ -41,42 +42,50 @@ export const DragDropTaskList = ({ items }: ChaptersListProps) => {
 	const onDragEnd = async (result: DropResult) => {
 		if (!result.destination) return;
 
-		console.log(result);
+		const destination = result.destination.droppableId;
+		const source = result.source.droppableId;
+
+		if (destination === source) return;
 
 		//Verificar si es una tarea completada o no
 		const items = Array.from(tasks);
 		const isCompleted = result.destination.droppableId === 'tasksCompleted';
 		const taskId = result.draggableId;
 
-		if (isCompleted) {
-			//Agregar tarea a la lista de tareas completadas
-			setTasksCompleted((prev) => [
-				...prev,
-				tasks.find((task) => task._id === taskId) as TaskWithProject,
-			]);
-			//Eliminar tarea de la lista de tareas
-			setTasks((prev) => prev.filter((task) => task._id !== taskId));
-		} else {
-			//Agregar tarea a la lista de tareas
-			setTasks((prev) => [
-				...prev,
-				tasksCompleted.find((task) => task._id === taskId) as TaskWithProject,
-			]);
-			//Eliminar tarea de la lista de tareas completadas
-			setTasksCompleted((prev) => prev.filter((task) => task._id !== taskId));
-		}
-
 		//actualizar la tarea en la base de datos
 		try {
+			setIsLoading(true);
+
+			if (isCompleted) {
+				//Agregar tarea a la lista de tareas completadas
+				setTasksCompleted((prev) => [
+					...prev,
+					tasks.find((task) => task._id === taskId) as TaskWithProject,
+				]);
+				//Eliminar tarea de la lista de tareas
+				setTasks((prev) => prev.filter((task) => task._id !== taskId));
+			} else {
+				//Agregar tarea a la lista de tareas
+				setTasks((prev) => [
+					...prev,
+					tasksCompleted.find((task) => task._id === taskId) as TaskWithProject,
+				]);
+				//Eliminar tarea de la lista de tareas completadas
+				setTasksCompleted((prev) => prev.filter((task) => task._id !== taskId));
+			}
+
 			await axios.patch(
 				`/tasks/change-status/${taskId}`,
 				{ status: isCompleted, completed: isCompleted ? session?.user._id : null },
 				{ headers: { Authorization: `Bearer ${session?.backendTokens.accessToken}` } }
 			);
+
 			router.refresh();
 			toast.success('Tarea actualizada');
 		} catch {
 			toast.error('No se pudo actualizar la tarea');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -97,7 +106,7 @@ export const DragDropTaskList = ({ items }: ChaptersListProps) => {
 						</p>
 					</div>
 					<Separator />
-					<Droppable droppableId='tasksInComplete'>
+					<Droppable droppableId='tasksInComplete' isDropDisabled={isLoading}>
 						{(provided) => (
 							<div ref={provided.innerRef}>
 								{tasks.map((task, index) => (
@@ -108,7 +117,8 @@ export const DragDropTaskList = ({ items }: ChaptersListProps) => {
 												{...provided.draggableProps}
 												{...provided.dragHandleProps}
 												className={cn(
-													'flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm'
+													'flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm',
+													isLoading && 'opacity-50 cursor-not-allowed'
 												)}
 											>
 												<div
@@ -152,7 +162,7 @@ export const DragDropTaskList = ({ items }: ChaptersListProps) => {
 						</p>
 					</div>
 					<Separator />
-					<Droppable droppableId='tasksCompleted'>
+					<Droppable droppableId='tasksCompleted' isDropDisabled={isLoading}>
 						{(provided) => (
 							<div {...provided.droppableProps} ref={provided.innerRef}>
 								{tasksCompleted.map((task, index) => (
@@ -160,7 +170,8 @@ export const DragDropTaskList = ({ items }: ChaptersListProps) => {
 										{(provided) => (
 											<div
 												className={cn(
-													'flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm'
+													'flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm',
+													isLoading && 'opacity-50 cursor-not-allowed'
 												)}
 												ref={provided.innerRef}
 												{...provided.draggableProps}

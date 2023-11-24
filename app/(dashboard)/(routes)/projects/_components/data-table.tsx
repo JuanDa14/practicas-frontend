@@ -24,11 +24,12 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Project } from '@/interfaces/project';
+import { ProjectWithCreator } from '@/interfaces/project';
+import { ProtectedComponent } from '@/components/protected-component';
 
 interface DataTableProps {
-	data: Project[];
-	columns: ColumnDef<Project>[];
+	data: ProjectWithCreator[];
+	columns: ColumnDef<ProjectWithCreator>[];
 }
 
 export function DataTable({ data = [], columns = [] }: DataTableProps) {
@@ -70,10 +71,15 @@ export function DataTable({ data = [], columns = [] }: DataTableProps) {
 								}
 								className='w-[300px] md:w-[400px]'
 							/>
-
-							<Link href={'/projects/create'} className='w-1/2 md:w-auto' title='Crear rol'>
-								<Button size={'sm'}>Crear proyecto</Button>
-							</Link>
+							<ProtectedComponent roles={['ADMINISTRADOR', 'SUPER USUARIO']}>
+								<Link
+									href={'/projects/create'}
+									className='w-1/2 md:w-auto'
+									title='Crear proyecto'
+								>
+									<Button size={'sm'}>Crear proyecto</Button>
+								</Link>
+							</ProtectedComponent>
 						</div>
 					</div>
 				</div>

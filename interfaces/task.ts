@@ -18,6 +18,7 @@ export interface Task {
 	createdAt: Date;
 	updatedAt: Date;
 	project: string;
+	order: number;
 }
 
 export interface TaskWithProject {
@@ -31,4 +32,5 @@ export interface TaskWithProject {
 	createdAt: Date;
 	updatedAt: Date;
 	project: Project;
+	order: number;
 }
